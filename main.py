@@ -61,13 +61,11 @@ def scrape():
     for url in car_urls:
         all_urls.append([url, find_table(url=url)])
 
-    # เขียนข้อมูลลงใน CSV
     csv_file = f'car_brands_urls_with_letter{letter_str.lower()}.csv'
     with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(all_urls)
 
-    # แปลง CSV เป็น JSON
     json_file = f'car_brands_urls_with_letter{letter_str.lower()}.json'
     data = []
     with open(csv_file, newline='', encoding='utf-8') as csvfile:
