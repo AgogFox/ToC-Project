@@ -31,14 +31,15 @@ cards.forEach((result) => {
 
     const card = document.createElement("div");
     card.classList = "card-body";
-
+    
+    var title = result.title.split("/blog/").slice(-1)[0];
     const content = `
         <div class="card">
             <div class="card-header" id="cards">
                 <img src="${result.image}" class="cardImage">
             </div>
             <div class="card-body">
-                <h5>${result.title}</h5>
+                <h5>${title}</h5>
             </div>
         </div>
     `;
