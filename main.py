@@ -65,7 +65,7 @@ def scrape():
 
 
     
-    with open(f'car_brands_urls_with_letter{letter_str.lower()}.csv', mode='w', newline='') as file:
+    with open(f'./csv/car_brands_urls_with_letter{letter_str.lower()}.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(all_urls)
 
