@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="top" id="top"></div>
-    <div class="header">
+    <div class="header" id="header">
       <h2>ToC Project</h2>
       <h1>
         <a href="#top">Eiei Vehicles</a>
@@ -178,4 +178,16 @@
       </div>
     </div>
   </body>
+  <script>
+    // When the user scrolls down 50px from the top of the document, resize the header's font size
+    window.onscroll = function() {scrollFunction()};
+    
+    function scrollFunction() {
+      if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+        document.getElementById("header").style.fontSize;
+      } else {
+        document.getElementById("header").style.fontSize;
+      }
+    }
+    </script>
 </html>
