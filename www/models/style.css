@@ -15,7 +15,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
   background-color: #424769;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   top: 0;
@@ -208,10 +208,10 @@ body {
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: 200ms ease-in-out;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 10px;
     z-index: 10;
-    background-color: white;
+    background-color: #7077A1;
     width: 500px;
     max-width: 80%;
   }
@@ -225,7 +225,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid black;
+    color: white;
+    /* border-bottom: 1px solid black; */
   }
   
   .modal-header .title {
@@ -240,6 +241,7 @@ body {
     background: none;
     font-size: 1.25rem;
     font-weight: bold;
+    color: white;
   }
   
   .modal-body {
@@ -247,6 +249,7 @@ body {
     overflow: hidden;
     overflow-y: scroll;
     height: 500px;
+    color: white;
   }
   
   #overlay {
@@ -268,6 +271,7 @@ body {
 
 
   .image-car{
+    border-radius: 15px;
     display: block;
     margin-left: auto;
     margin-right: auto;
