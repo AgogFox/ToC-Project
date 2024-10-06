@@ -1,11 +1,24 @@
 
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: #2A2E46;
   }
-  
+
+.char-button{
+  background-color: #7077A1;
+  color: #F6B17A;
+  display: inline-block;
+  margin: 0;
+  width: 5vw;
+  height: 5vw;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 0vw;
+  border-radius: 15%;
+  border:0;
+  cursor: pointer;
+}
+
   #top {
     width: 0;
     height: 0;
@@ -30,6 +43,7 @@ body {
   .header h1,
   .header h2 {
     margin: 0;
+    font-size: 20px;
   }
   
   .header h1 * {
@@ -41,10 +55,6 @@ body {
   
   .header h1 *:hover {
     color: #007bff;
-  }
-  
-  .header h2 {
-    font-size: 20px;
   }
   
   .header .team-detail {
@@ -124,17 +134,39 @@ body {
     color: #b1b1b1;
   }
 
+.describe{
+  padding: 5%;
+}
+
+.charbox{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5%;
+}
+
+.character{
+  display: grid;
+  place-items: center;
+  grid-gap: 2vw ;
+  grid-template-areas: 'myArea myArea . . . . . . .  .';
+  margin: 0 5%;
+}
+
+.character > div {
+  text-align: center;
+}
+
 h1{
-    font-size: 40px;
-    color:#ffffff
+  font-size: 40px;
+  color:#ffffff
 }
 
 h2{
-    font-size: 20px;
-    color:#ffffff
+  font-size: 20px;
+  color:#ffffff
 }
 
-/* body {
-    background-color: #92a8d1;
-} */
+h3{
+  font-size: 30px;
+}
 

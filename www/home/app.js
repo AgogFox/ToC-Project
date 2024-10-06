@@ -7,7 +7,7 @@ for (let i = 65; i <= 90; i++) {
     
     const content = `
         <div class="card">
-            <button id="character">
+            <button class="char-button" id="character">
                 <h3>${ch}</h3>
             </div>
         </div>
