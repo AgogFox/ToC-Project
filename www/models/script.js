@@ -51,7 +51,8 @@ function createDynamicModal(content) {
         </div>
         <div class="modal-body">
             <img class="image-car" src="${content.image}" alt="Image">
-            <div class="modal-object"> ${content.text}
+            <div class="modal-object">
+              <li> ${content.text} : ${content.text} </li>
             </div>
         </div>
     `;
