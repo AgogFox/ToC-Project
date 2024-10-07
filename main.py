@@ -1,7 +1,12 @@
 import re
 import requests
 import json
+<<<<<<< HEAD
 from flask import Flask,send_from_directory
+=======
+from flask import Flask, request
+from concurrent.futures import ThreadPoolExecutor, as_completed
+>>>>>>> 8df6941f10303ce07c7a0e540cab0c58cff18e32
 
 BASE_URL = "https://www.supercars.net/blog/all-brands/"
 
@@ -13,12 +18,16 @@ BASE_URL = "https://www.supercars.net/blog/all-brands/"
 #   [x] direct
 #   [] 301 manual
 #[x]filter infomation of each car
-#[]create API endpoint
+#create API endpoint
+#  [x]/api/alpha
+#  [x]/api/brand
+#  [x]/api/search
 #[x]convert return data to json format agreed on API docs
-#[]scrape image
-#[]search
+#[x]scrape image
 #[]convert data to csv for download
-#[]filter everything before 'Pictures &amp; Galleries' for easier scraping
+#[x]multi thread request
+#[]condition /api/bran/<brand with one model> (start with 4 digit) use function find table instead
+#[]filter everything before 'Pictures &amp; Galleries' for easier/faster scraping and enable to scrape model in blog
 #[]click load more button to get full information
 
 class Scraper:
@@ -76,14 +85,24 @@ class Scraper:
 
         return models_dict
 
-    def find_table(self, url: str): #Third layer: find infomation of that car
+    def __find_image(self, html: str) -> dict:
+        image_pattern = re.compile(
+            r'<div class="hero">.*?<img [^>]*src="([^"]+)"[^>]*>.*?</div>'
+        )
+        image_url = image_pattern.search(html)
+        return image_url.group(1)
+
+    def find_table(self, model_url: str) -> dict: #Third layer: find infomation of that car
         table_dict = {}
         table = []
         table_pattern = re.compile(
             r'<table class="cardetails"[^>]*>(.*?)</table>', re.DOTALL
         )
 
-        table_html = table_pattern.search(self.__fetch_html(url))
+        model_html = self.__fetch_html(model_url)
+        table_html = table_pattern.search(model_html)
+        image_url = self.__find_image(model_html)
+        table_dict["img"]  = image_url
 
         if table_html is None:
             return
@@ -137,9 +156,50 @@ def brand(name):
         r[model_name] = scraper.find_table(model_url) #Third layer
     return r
 
-
+@app.route('/api/search', methods=["GET"])
 def search():
-    pass
+    query = request.args.get('q').lower()
+    result_model = {}
+    result = {}
+
+    # First multithreading to fetch brand lists
+    brands_az_dict = {}
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(scraper.find_brands_list, chr(i)): i for i in range(65, 90)}
+        for future in as_completed(futures):
+            i = futures[future]
+            try:
+                brands_az_dict[i] = future.result()
+            except Exception as e:
+                print(f"Failed to fetch brands for letter {chr(i)}: {e}")
+
+    # Now, gather all the brand links and find models for each brand
+    with ThreadPoolExecutor() as executor:
+        model_futures = []
+        for brand_alpha in brands_az_dict.values():  # brand a-z
+            for brand in brand_alpha.values():  # link to each brand
+                # Queue up a thread to find models for each brand
+                model_futures.append(executor.submit(scraper.find_model, brand))
+        
+        for future in as_completed(model_futures):
+            try:
+                models = future.result()
+                # Filter models based on the query and update result_model
+                result_model.update({k: v for k, v in models.items() if query in k.lower()})
+            except Exception as e:
+                print(f"Failed to fetch models: {e}")
+
+    # Finally, multithreading to find tables for each model
+    with ThreadPoolExecutor() as executor:
+        table_futures = {executor.submit(scraper.find_table, model_url): model_name for model_name, model_url in result_model.items()}
+        for future in as_completed(table_futures):
+            model_name = table_futures[future]
+            try:
+                result[model_name] = future.result()
+            except Exception as e:
+                print(f"Failed to fetch table for {model_name}: {e}")
+
+    return result
 
 if(__name__) == "__main__":
     app.run(debug=True)
