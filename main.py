@@ -1,111 +1,114 @@
 import re
 import requests
 import csv
+from flask import Flask
 
-html_base = "https://www.supercars.net/blog/all-car-brands-a-to-z/"
+BASE_URL = "https://www.supercars.net/blog/all-brands/"
 
-def fetch_html(html):
-    return requests.get(html).text
+#TODO
+#[x]filter brands base on alphabet
+#filter car of each brand
+#   [x]301 to all-brands
+#   [x]301 to /blog/category
+#   [x] direct
+#   [] 301 manual
+#[x]filter infomation of each car
+#[]create API endpoint
+#[x]convert return data to json format agreed on API docs
+#[]scrape image
+#[]convert data to csv for download
+#[]filter everything before 'Pictures &amp; Galleries' for easier scraping
+#[]click load more button to get full information
 
-def filter_url(html_text, layer, call_in_layer=None):
-    if layer == 0:
-        url_pattern = re.compile(r'href=["\'](http[s]?://[^"\']+)["\']')
-    elif layer == 1:
-        url_pattern = re.compile(
-            r'href=["\'](https://www\.supercars\.net/blog/all-car-brands-a-to-z/[a-z]/)["\']')
-    elif layer == 2:
-        url_pattern = re.compile(
-            r'href=["\'](https://www\.supercars\.net/blog/' + re.escape(call_in_layer) + r'[^/]+/)["\']')
-        urls = find_fliter_urls(html_text, url_pattern)
-        url_pattern = re.compile(
-            r'href=["\'](https://www\.supercars\.net/blog/tag/' + re.escape(call_in_layer) + r'[^/]+/)["\']')
-        urls = urls + find_fliter_urls(html_text, url_pattern)
-        url_pattern = re.compile(
-            r'href=["\'](https://www\.supercars\.net/blog/\d[^-]+-' + re.escape(call_in_layer) + r'[^/]+/)["\']')
-        urls = urls + find_fliter_urls(html_text, url_pattern)
-        return urls
-    elif layer == 3:
-        url_pattern
+class Scraper:
+    def __init__(self, url: str) -> None:
+        self.BASE_URL = url
+        self.BASE_HTML = self.__fetch_html(self.BASE_URL)
 
-    urls = find_fliter_urls(html_text, url_pattern)
-    return urls
+    def __fetch_html(self, url):
+        return requests.get(url).text
 
-def find_fliter_urls(html_text, url_pattern):
-    urls = url_pattern.findall(html_text)
-    urls = list(set(urls))
-    urls.sort()
-    return urls
-
-def find_table(url):
-    ret = []
-    pattern = re.compile(
-        r'<table class="cardetails"[^>]*>(.*?)</table>', re.DOTALL)
-    match = pattern.search(fetch_html(url))
-    if not match:
-        return None
-
-    table = match.group(1)
-    pattern = re.compile(r'<tr>(.*?)</tr>', re.DOTALL)
-    rows = pattern.findall(table)
-
-    for row in rows:
-        pattern = re.compile(r'<td[^>]*>(.*?)</td>', re.DOTALL)
-        data_rows = pattern.findall(row)
-        if re.sub(r'<[^>]+>', '', data_rows[0]).strip() == "":
-            continue
-        ret.append(
-            f"{re.sub(r'<[^>]+>', '', data_rows[0]).strip()} : {re.sub(r'<[^>]+>', '', data_rows[1]).strip()}")
-    return " | ".join(ret)
-
-def find_car(url):
-    ret = []
-    print(f"Processing {url}...")
-    pattern = re.compile(
-        r'<div class="mask">.*?</div>\s*<div class="meta">(.*?)</div>', re.DOTALL
-    )
-
-    html_content = fetch_html(url)
-    matches = pattern.findall(html_content)
-
-    if not matches:
-        return []
-
-    for wrap in matches:
-        if re.search(r'<div class="byline">', wrap, re.IGNORECASE):
-            continue
-
-        title_pattern = re.compile(
-            r'<h3 class="title"><a [^>]*href="(.*?)">(.*?)</a></h3>', re.DOTALL
+    def find_brands_list(self, char: str) -> dict: #First layer: find list of brands
+        brand_dict = {}
+        brand_pattern = re.compile(
+            rf'<li><p><a[^>]*\bhref=["\']([^"\']*)["\'][^>]*>({char.upper()}.*?)</a>'
         )
-        match = title_pattern.search(wrap)
-        if match:
-            car_url = match.group(1)
-            car_title = match.group(2)
-            if "gallery" in car_title.lower():
+        brands = re.findall(brand_pattern, self.BASE_HTML)
+        for brand_url, brand_name in brands:
+            brand_dict[brand_name] = brand_url
+        return brand_dict
+
+    def find_model(self, brand_url: str) -> list: #Second layer: find list of cars in that brand
+        models_dict = {}
+        models = []
+        card_pattern = re.compile(
+            r'<div class="mask">.*?</div>\s*<div class="meta">(.*?)</div>', re.DOTALL
+        )
+        brand_html = self.__fetch_html(brand_url)
+
+        cards = card_pattern.findall(brand_html)
+        
+        if cards is None:
+            return []
+        
+        for card in cards: 
+            
+            if re.search(r'<div class="byline">', card, re.IGNORECASE): #skip articles cards
                 continue
-            print(f"From {url} added {car_url}")
-            ret.append([car_url, find_table(car_url)])
-    return ret
+            
+            card_title_pattern = re.compile(
+                r'<h3 class="title"><a [^>]*href="(.*?)">(.*?)</a></h3>', re.DOTALL
+            )
 
-def scrape():
-    all_urls = []
-    letter_str = input("Put in the alphabet :")
-    html_url = html_base + letter_str.lower() + "/"
-    html_content = fetch_html(html_url)
+            card_title = card_title_pattern.search(card)
+            if card_title:
+                model_url = card_title.group(1)
+                model_title = card_title.group(2)
+                
+                if "gallery" in model_title.lower(): #skip if it is a gallery
+                    continue
+                
+                models.append((model_title, model_url))
+        
+        for model_name, model_url in models:
+            models_dict[model_name] = model_url
 
-    car_urls = filter_url(html_content, 2, letter_str)
+        return models_dict
 
-    for url in car_urls:
-        table = find_table(url=url)
-        if table is None:
-            all_urls += find_car(url)
-        else:
-            print(f"From {url} added something")
-            all_urls.append([url, table])
+    def find_table(self, url: str): #Third layer: find infomation of that car
+        table_dict = {}
+        table = []
+        table_pattern = re.compile(
+            r'<table class="cardetails"[^>]*>(.*?)</table>', re.DOTALL
+        )
 
-    with open(f'car_brands_urls_with_letter{letter_str.lower()}.csv', mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        writer.writerows(all_urls)
+        table_html = table_pattern.search(self.__fetch_html(url))
 
-while True:
-    scrape()
+        if table_html is None:
+            return
+        
+        table_html = table_html.group(0) #extract html from match object
+        row_pattern = re.compile(r'<tr>(.*?)</tr>', re.DOTALL)
+        rows = row_pattern.findall(table_html)
+
+        for row in rows:
+            data_pattern = re.compile(r'<td[^>]*>(.*?)</td>', re.DOTALL)
+            data_column = data_pattern.findall(row)
+
+            if re.sub(r'<[^>]+>', '', data_column[0]).strip() == "": #skip if the first column is empty
+                continue
+
+            table.append(
+                re.sub(r'<[^>]+>', '', data_column[0]).strip() + " : " + 
+                re.sub(r'<[^>]+>', '', data_column[1]).strip()
+            )
+
+        for item in table:
+            key, value = item.split(' : ')
+            table_dict[key] = value
+        return table_dict
+
+scraper = Scraper(BASE_URL)
+
+def alphabet():
+    pass
