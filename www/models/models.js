@@ -1,9 +1,36 @@
-import { fetchData } from "./fetch";
+// import { fetchData } from "./fetch";
 const container = document.getElementById('cards');
 
-var cards = fetchData('/api/brand/');
+// var cards = fetchData('/api/brand/a');
 
-cards.forEach(() => {
+const cards = [{
+    title: "something/blog/test1",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}, {
+    title: "something/blog/test2",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}, {
+    title: "something/blog/test3",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}, {
+    title: "something/blog/test4",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}, {
+    title: "something/blog/test5",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}, {
+    title: "something/blog/test6",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}, {
+    title: "something/blog/test6",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}, {
+    title: "something/blog/test6",
+    image: "https://www.supercars.net/blog/wp-content/uploads/2016/04/2004_Fuore_BlackJagConcept7.jpg",
+}];
+
+cards.forEach((result) => {
+    console.log(result)
 
     // const card = document.createElement("button");
     // card.classList = "vehicle-card";
@@ -12,9 +39,9 @@ cards.forEach(() => {
         <button class="vehicle-card" data-modal-target="#modal">
             <img
                 alt="image of a vehicle"
-                src="https://storage.googleapis.com/a1aa/image/5RuT8CZtQd7UGJyUbVHeHHnIdwvTvYwOAd5eY1BOcpZayajTA.jpg"
+                src="${result.image}"
             />
-            <p>2024 4Runner</p>
+            <p>dfhz</p>
         </button>
     `;
 
