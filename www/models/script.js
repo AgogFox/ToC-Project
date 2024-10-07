@@ -39,25 +39,35 @@
 const cardItems = document.querySelectorAll('.vehicle-card');
 const overlay = document.getElementById('overlay');
 
+const contentArray = [
+  { text: "Item 1", image: "https://example.com/image1.jpg" },
+  { text: "Item 2", image: "https://example.com/image2.jpg" },
+  { text: "Item 3", image: "https://example.com/image3.jpg" },
+];
+
+
 // ฟังก์ชันเพื่อสร้าง modal
 function createDynamicModal(content) {
     const modal = document.createElement('div');
     modal.classList.add('modal', 'active');
 
+    const listItems = contentArray.map(item => `<li>${item.text} : ${item.text}</li>`).join('');
+
+
     modal.innerHTML = `
         <div class="modal-header">
-            <div class="title">Dynamic Modal</div>
+            <div class="title">${content.text}</div>
             <button data-close-button class="close-button">&times;</button>
         </div>
         <div class="modal-body">
             <img class="image-car" src="${content.image}" alt="Image">
             <div class="modal-object">
-              <li> ${content.text} : ${content.text} </li>
+             <ul>${listItems}</ul>
             </div>
         </div>
     `;
-
     document.body.appendChild(modal);
+
 
     // เพิ่ม event listener เพื่อปิด modal
     const closeButton = modal.querySelector('[data-close-button]');
