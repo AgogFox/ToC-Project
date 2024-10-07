@@ -1,3 +1,12 @@
+function changePage(brand) {
+    console.log(brand);
+    fetch(`/api/alpha/${brand}`)
+        .then(response => response.json())
+        .then(data => {
+            window.location.href = `/models?brand=${brand}`;
+        });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -15,7 +24,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     const itemCar = document.createElement('li');
                     const carLink = document.createElement('a');
                     carLink.textContent = car;
-                    carLink.href = `${encodeURIComponent(car)}`;
+                    carLink.href = "#";
+                    carLink.onclick = function() {
+                        changePage(car);
+                    };
                     itemCar.appendChild(carLink);
                     carList.appendChild(itemCar);
                     csvData.push(car);
