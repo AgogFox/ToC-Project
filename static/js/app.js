@@ -1,3 +1,11 @@
+function changePage(letter) {
+    fetch(`/api/alpha/${letter}`)
+        .then(response => response.json())
+        .then(data => {
+            window.location.href = `/brands?letter=${letter}`;
+        });
+}
+
 const container = document.getElementById('character');
 
 for (let i = 65; i <= 90; i++) {
@@ -7,11 +15,10 @@ for (let i = 65; i <= 90; i++) {
     
     const content = `
         <div class="card">
-            <button class="char-button" id="character">
+            <button  onclick="changePage('${ch}')" class="char-button" id="${ch}" >
                 <h3>${ch}</h3>
             </div>
         </div>
     `;
-
     container.innerHTML += content;
 };

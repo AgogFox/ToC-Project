@@ -8,7 +8,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       rel="stylesheet"
     />
-    <link href="./style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/brands.css">
 </head>
 <body>
     <div class="top" id="top"></div>
@@ -37,22 +37,7 @@
 
     <ul class="car-list" id="car-list">
     </ul>
-    <script>
-        const testLetter = "A"
-        const testCarList = ["Austin","Audi","Abarth","Aston Martin","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"]
-        const selectedLetter = document.getElementById('selected-letter');
-        selectedLetter.textContent = testLetter
-
-        const carList = document.getElementById('car-list');
-        testCarList.forEach(car =>{
-            const itemCar = document.createElement('li');
-            const carLink = document.createElement('a');
-            carLink.textContent = car;
-            carLink.href = `${encodeURIComponent(car)}`
-            itemCar.appendChild(carLink);
-            carList.appendChild(itemCar);
-        })
-
+    <script src ="/static/js/brands.js">
     </script>
 </body>
 </html>

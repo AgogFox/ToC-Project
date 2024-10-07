@@ -1,7 +1,7 @@
 import re
 import requests
 import json
-from flask import Flask
+from flask import Flask,send_from_directory
 
 BASE_URL = "https://www.supercars.net/blog/all-brands/"
 
@@ -112,6 +112,13 @@ class Scraper:
 app = Flask(__name__)
 scraper = Scraper(BASE_URL)
 
+@app.route('/home')
+def home():
+    return send_from_directory('www/home','index.html')
+
+@app.route('/brands')
+def send_brands_file():
+    return send_from_directory('www/brands', 'brands.html')
 
 @app.route('/api/alpha/<char>', methods=["GET"])
 def alphabet(char):
