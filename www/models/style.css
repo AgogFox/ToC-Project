@@ -14,7 +14,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 10px 30px;
   background-color: #424769;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   top: 0;
@@ -23,7 +23,7 @@ body {
 }
 
 .header .title{
-  color: #F6B17A;
+  color: #ffc66c;
 }
 
 .header h1,
@@ -39,7 +39,7 @@ body {
 }
 
 .header h1 *:hover {
-  color: #007bff;
+  color: #ff8772;
 }
 
 .header h2 {
@@ -65,24 +65,25 @@ body {
 }
 
 .header .team span:hover {
-  color: #007bff;
+  color: #ffc66c;
 }
 
 .header .github {
   width: 30px;
   height: 30px;
-  background-color: #e4e4e4;
-  border: 2px solid #ffffff;
+  background-color: #ffffff;
+  border: 2px solid #ffc66c;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   transition: background-color 0.2s ease, border 0.2s ease;
 }
 
 .header .github:hover {
-  background-color: #ffffff;
-  border: 2px solid #007bff;
+  background-color: #ffc66c;
+  border: 2px solid #ffc66c;
 }
 
 .header .github a {
@@ -111,6 +112,7 @@ body {
 .search-container input {
   width: 400px;
   padding: 10px;
+  padding-right: 36px;
   border: 1px solid #cccccc;
   border-radius: 20px;
   outline: none;
@@ -121,13 +123,18 @@ body {
   left: -30px;
   bottom: -10px;
   color: #b1b1b1;
+  transition: color 0.2s ease;
+}
+
+.search-container input:focus + .fa-search {
+  color: #ff8772;
 }
 
 .content p {
   margin: 20px 20px;
 }
 
-.content .download-btn {
+/* .content .download-btn {
   display: inline-block;
   padding: 10px 20px;
   background-color: #007bff;
@@ -139,7 +146,7 @@ body {
 
 .content .download-btn:hover {
   background-color: #1e5794;
-}
+} */
 
 .vehicles {
   display: flex;
@@ -168,7 +175,7 @@ body {
 
 .vehicle-card:hover {
   transform: scale(1.05);
-  box-shadow: 2px 5px 7px rgba(0, 132, 255, 0.25);
+  box-shadow: 0px 5px 10px rgba(117, 46, 90, 0.8);
 }
 
 .vehicle-card img {
@@ -194,6 +201,9 @@ body {
   .vehicle-card {
     flex: 0 0 400px;
     height: 480px;
+  }
+  .search-container input {
+    width: 200px;
   }
 }
 
@@ -290,7 +300,7 @@ body {
   right: 1.5%;
   width: 60px;
   height: 60px;
-  background: #F6B17A;
+  background: #ffc66c;
   color: #000000;
   display: inline-flex;
   align-items: center;
@@ -299,11 +309,11 @@ body {
   border-radius: 50%;
   border: none;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .rounded-button:hover {
-  background: #F6B17A;
+  background: #ff8772;
   transform: scale(1.05);
-  box-shadow: 2px 5px 7px rgba(0, 132, 255, 0.25);
+  box-shadow: 0px 5px 10px rgba(117, 46, 90, 0.8);
 }
