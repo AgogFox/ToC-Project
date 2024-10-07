@@ -16,6 +16,7 @@ BASE_URL = "https://www.supercars.net/blog/all-brands/"
 #[]create API endpoint
 #[x]convert return data to json format agreed on API docs
 #[]scrape image
+#[]search
 #[]convert data to csv for download
 #[]filter everything before 'Pictures &amp; Galleries' for easier scraping
 #[]click load more button to get full information
@@ -38,7 +39,7 @@ class Scraper:
             brand_dict[brand_name] = brand_url
         return brand_dict
 
-    def find_model(self, brand_url: str) -> list: #Second layer: find list of cars in that brand
+    def find_model(self, brand_url: str) -> dict: #Second layer: find list of cars in that brand
         models_dict = {}
         models = []
         card_pattern = re.compile(
@@ -111,14 +112,24 @@ class Scraper:
 app = Flask(__name__)
 scraper = Scraper(BASE_URL)
 
-@app.route('/api/alpha/<char>', methods=['GET'])
+
+@app.route('/api/alpha/<char>', methods=["GET"])
 def alphabet(char):
-    names = list(scraper.find_brands_list(char).keys())
+    names = list(scraper.find_brands_list(char).keys()) #First layer
     r = {char : names}
     return r
 
-def brand():
-    pass
+@app.route('/api/brand/<name>', methods=["GET"])
+def brand(name):
+    r = {}
+    first_letter = name[0]
+    brands_dict = scraper.find_brands_list(first_letter) #First layer
+    brand_url = brands_dict[name.upper()] #Seccond layer
+    models = scraper.find_model(brand_url)
+    for model_name, model_url in models.items():
+        r[model_name] = scraper.find_table(model_url) #Third layer
+    return r
+
 
 def search():
     pass
