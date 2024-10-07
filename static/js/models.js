@@ -28,12 +28,22 @@ async function run() {
 function populateVehicleCards(data) {
     Object.keys(data).forEach((k) => {
         const car = data[k];
+        if (car == null) {
+            `
+            <button class="vehicle-card" data-modal-target="#modal" data-text="${k}" data-image="https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg">
+                <img alt="image of a vehicle" src="https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg" />
+                <p>${k}</p>
+            </button>`
+        }
+        else{
+
         const content = `
             <button class="vehicle-card" data-modal-target="#modal" data-text="${k}" data-image="${car.img}">
                 <img alt="image of a vehicle" src="${car.img}" />
                 <p>${k}</p>
             </button>`;
         container.innerHTML += content;
+        }
     });
 
     // Call the function to add event listeners to the cards
@@ -72,9 +82,34 @@ function createDynamicModal(content, DATA) {
     const details = DATA[key_data];
 
     if (!details) {
-        console.error('No details found for:', key_data);
-        return;
+
+        const modal = document.createElement('div');
+        modal.classList.add('modal', 'active');
+        modal.innerHTML = `
+        <div class="modal-header">
+            <div class="title">${content.text}</div>        
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <img class="image-car" src="${content.image}" alt="Image">
+            <div class="modal-object">
+                <ul>No infomation </ul>
+            </div>
+        </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Add event listener to close modal
+        const closeButton = modal.querySelector('[data-close-button]');
+        closeButton.addEventListener('click', () => {
+            closeModal(modal);
+        });
+
+        overlay.classList.add('active'); // Show overlay
+        
+        
     }
+    else {
 
     const modal = document.createElement('div');
     modal.classList.add('modal', 'active');
@@ -103,6 +138,7 @@ function createDynamicModal(content, DATA) {
     });
 
     overlay.classList.add('active'); // Show overlay
+    }
 }
 
 // Function to close the modal
