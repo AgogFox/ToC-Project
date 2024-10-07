@@ -1,6 +1,8 @@
 
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     background-color: #2A2E46;
   }
 
@@ -35,7 +37,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 30px;
     background-color: #424769;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     top: 0;
@@ -44,13 +46,12 @@ body {
   }
   
   .header .title{
-    color: #F6B17A;
+    color: #ffc66c;
   }
   
   .header h1,
   .header h2 {
     margin: 0;
-    font-size: 20px;
   }
   
   .header h1 * {
@@ -61,7 +62,11 @@ body {
   }
   
   .header h1 *:hover {
-    color: #007bff;
+    color: #ff8772;
+  }
+  
+  .header h2 {
+    font-size: 20px;
   }
   
   .header .team-detail {
@@ -83,24 +88,25 @@ body {
   }
   
   .header .team span:hover {
-    color: #007bff;
+    color: #ffc66c;
   }
   
   .header .github {
     width: 30px;
     height: 30px;
-    background-color: #e4e4e4;
-    border: 2px solid #ffffff;
+    background-color: #ffffff;
+    border: 2px solid #ffc66c;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     transition: background-color 0.2s ease, border 0.2s ease;
   }
   
   .header .github:hover {
-    background-color: #ffffff;
-    border: 2px solid #007bff;
+    background-color: #ffc66c;
+    border: 2px solid #ffc66c;
   }
   
   .header .github a {
@@ -129,6 +135,7 @@ body {
   .search-container input {
     width: 400px;
     padding: 10px;
+    padding-right: 36px;
     border: 1px solid #cccccc;
     border-radius: 20px;
     outline: none;
@@ -139,7 +146,17 @@ body {
     left: -30px;
     bottom: -10px;
     color: #b1b1b1;
+    transition: color 0.2s ease;
   }
+  
+  .search-container input:focus + .fa-search {
+    color: #ff8772;
+  }
+  
+  .content p {
+    margin: 20px 20px;
+  }
+  
 
 .describe{
   padding: 0 5% 3% 5%;
