@@ -1,12 +1,8 @@
 import re
 import requests
 import json
-<<<<<<< HEAD
-from flask import Flask,send_from_directory
-=======
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from concurrent.futures import ThreadPoolExecutor, as_completed
->>>>>>> 8df6941f10303ce07c7a0e540cab0c58cff18e32
 
 BASE_URL = "https://www.supercars.net/blog/all-brands/"
 
