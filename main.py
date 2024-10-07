@@ -76,14 +76,24 @@ class Scraper:
 
         return models_dict
 
-    def find_table(self, url: str): #Third layer: find infomation of that car
+    def __find_image(self, html: str) -> dict:
+        image_pattern = re.compile(
+            r'<div class="hero">.*?<img [^>]*src="([^"]+)"[^>]*>.*?</div>'
+        )
+        image_url = image_pattern.search(html)
+        return image_url.group(1)
+
+    def find_table(self, model_url: str) -> dict: #Third layer: find infomation of that car
         table_dict = {}
         table = []
         table_pattern = re.compile(
             r'<table class="cardetails"[^>]*>(.*?)</table>', re.DOTALL
         )
 
-        table_html = table_pattern.search(self.__fetch_html(url))
+        model_html = self.__fetch_html(model_url)
+        table_html = table_pattern.search(model_html)
+        image_url = self.__find_image(model_html)
+        table_dict["img"]  = image_url
 
         if table_html is None:
             return
