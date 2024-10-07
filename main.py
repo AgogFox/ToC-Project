@@ -1,6 +1,6 @@
 import re
 import requests
-import csv
+import json
 from flask import Flask
 
 BASE_URL = "https://www.supercars.net/blog/all-brands/"
@@ -108,7 +108,20 @@ class Scraper:
             table_dict[key] = value
         return table_dict
 
+app = Flask(__name__)
 scraper = Scraper(BASE_URL)
 
-def alphabet():
+@app.route('/api/alpha/<char>', methods=['GET'])
+def alphabet(char):
+    names = list(scraper.find_brands_list(char).keys())
+    r = {char : names}
+    return r
+
+def brand():
     pass
+
+def search():
+    pass
+
+if(__name__) == "__main__":
+    app.run(debug=True)
