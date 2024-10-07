@@ -148,12 +148,29 @@ def alphabet(char):
 @app.route('/api/brand/<name>', methods=["GET"])
 def brand(name):
     r = {}
-    first_letter = name[0]
-    brands_dict = scraper.find_brands_list(first_letter) #First layer
-    brand_url = brands_dict[name.upper()] #Seccond layer
+    first_letter = name[0].upper()
+
+    # First layer: Fetching the brand dictionary
+    brands_dict = scraper.find_brands_list(first_letter)
+    brand_url = brands_dict[name.upper()]  # Second layer: Brand URL
+
+    # Fetch all models (Third layer)
     models = scraper.find_model(brand_url)
-    for model_name, model_url in models.items():
-        r[model_name] = scraper.find_table(model_url) #Third layer
+
+    # Function to fetch model table
+    def fetch_model_table(model_name, model_url):
+        return model_name, scraper.find_table(model_url)
+
+    # Use ThreadPoolExecutor for parallel fetching of model tables
+    with ThreadPoolExecutor() as executor:
+        futures = [executor.submit(fetch_model_table, model_name, model_url) 
+                   for model_name, model_url in models.items()]
+
+        # Gather results from all threads
+        for future in as_completed(futures):
+            model_name, table_data = future.result()
+            r[model_name] = table_data
+            
     return r
 
 @app.route('/api/search', methods=["GET"])
