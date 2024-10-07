@@ -127,7 +127,7 @@ class Scraper:
 app = Flask(__name__)
 scraper = Scraper(BASE_URL)
 
-@app.route('/home')
+@app.route('/')
 def home():
     return send_from_directory('www/home','index.html')
 
