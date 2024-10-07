@@ -1,6 +1,6 @@
 function changePage(brand) {
     console.log(brand);
-    fetch(`/api/alpha/${brand}`)
+    fetch(`/api/brand/${brand}`)
         .then(response => response.json())
         .then(data => {
             window.location.href = `/models?brand=${brand}`;
