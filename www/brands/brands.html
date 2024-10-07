@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToC Project - Eiei Vehicles</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="./style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="top" id="top"></div>
+    <div class="header">
+      <h1>
+        <a class="title" href="#top">Eiei Vehicles</a>
+      </h1>
+      <div class="search-container">
+        <input placeholder="Search" type="text" />
+        <i class="fas fa-search"> </i>
+      </div>
+      <div class="team-detail">
+        <div class="team">
+          <span> Our Team </span>
+        </div>
+        <div class="github">
+          <a href="https://github.com" target="_blank">
+            <i class="fab fa-github"> </i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="letter-display" >
+        <h1><span id="selected-letter"></span></h1>
+    </div>
+
+    <ul class="car-list" id="car-list">
+    </ul>
+    <script>
+        const testLetter = "A"
+        const testCarList = ["Austin","Audi","Abarth","Aston Martin","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"]
+        const selectedLetter = document.getElementById('selected-letter');
+        selectedLetter.textContent = testLetter
+
+        const carList = document.getElementById('car-list');
+        testCarList.forEach(car =>{
+            const itemCar = document.createElement('li');
+            const carLink = document.createElement('a');
+            carLink.textContent = car;
+            carLink.href = `${encodeURIComponent(car)}`
+            itemCar.appendChild(carLink);
+            carList.appendChild(itemCar);
+        })
+
+    </script>
+</body>
+</html>
+
+
