@@ -2,8 +2,12 @@ import re
 import requests
 import json
 from flask import Flask
+from flask_cors import CORS
+
+
 
 BASE_URL = "https://www.supercars.net/blog/all-brands/"
+
 
 #TODO
 #[x]filter brands base on alphabet
@@ -125,6 +129,7 @@ class Scraper:
 
 app = Flask(__name__)
 scraper = Scraper(BASE_URL)
+CORS(app)
 
 
 @app.route('/api/alpha/<char>', methods=["GET"])
@@ -150,3 +155,4 @@ def search():
 
 if(__name__) == "__main__":
     app.run(debug=True)
+    

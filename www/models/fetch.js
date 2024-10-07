@@ -1,3 +1,5 @@
+
+
 export function fetchData(url) {
     fetch(url)
         .then((response) => {
@@ -10,4 +12,5 @@ export function fetchData(url) {
         .catch((error) => console.error("Fetch error:", error));
     return data
 }
+
 
