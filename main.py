@@ -21,10 +21,10 @@ BASE_URL = "https://www.supercars.net/blog/all-brands/"
 #[x]convert return data to json format agreed on API docs
 #[x]scrape image
 #[]convert data to csv for download
-#[]filter everything before 'Pictures &amp; Galleries' for easier/faster scraping
-#[]click load more button to get full information
-#[]multi thread request
+#[x]multi thread request
 #[]condition /api/bran/<brand with one model> (start with 4 digit) use function find table instead
+#[]filter everything before 'Pictures &amp; Galleries' for easier/faster scraping and enable to scrape model in blog
+#[]click load more button to get full information
 
 class Scraper:
     def __init__(self, url: str) -> None:
