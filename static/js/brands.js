@@ -1,10 +1,6 @@
 function changePage(brand) {
     console.log(brand);
-    fetch(`/api/alpha/${brand}`)
-        .then(response => response.json())
-        .then(data => {
-            window.location.href = `/models?brand=${brand}`;
-        });
+    window.location.href = `/models?brand=${brand}`;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -39,6 +35,12 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error('Error fetching data:', error));
     }
 });
+
+function getInputValue() {
+    const inputElement = document.getElementById('inpsearch').value.toUpperCase();
+    console.log(inputElement);
+    window.location.href = `/models?brand=${inputElement}`;
+}
 
 function createCSVDownloadButton(data) {
     const csvContent = "data:text/csv;charset=utf-8," + data.map(e => e).join("\n");
