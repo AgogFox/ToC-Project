@@ -1,7 +1,8 @@
 import re
 import requests
 import json
-from flask import Flask
+from flask import Flask, request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 BASE_URL = "https://www.supercars.net/blog/all-brands/"
 
@@ -16,14 +17,14 @@ BASE_URL = "https://www.supercars.net/blog/all-brands/"
 #create API endpoint
 #  [x]/api/alpha
 #  [x]/api/brand
-#  []/api/search
-#  []/api/download ?typee=, ?alpha=, ?brand=
+#  [x]/api/search
 #[x]convert return data to json format agreed on API docs
 #[x]scrape image
 #[]convert data to csv for download
 #[]filter everything before 'Pictures &amp; Galleries' for easier/faster scraping
 #[]click load more button to get full information
 #[]multi thread request
+#[]condition /api/bran/<brand with one model> (start with 4 digit) use function find table instead
 
 class Scraper:
     def __init__(self, url: str) -> None:
@@ -144,9 +145,50 @@ def brand(name):
         r[model_name] = scraper.find_table(model_url) #Third layer
     return r
 
-
+@app.route('/api/search', methods=["GET"])
 def search():
-    pass
+    query = request.args.get('q').lower()
+    result_model = {}
+    result = {}
+
+    # First multithreading to fetch brand lists
+    brands_az_dict = {}
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(scraper.find_brands_list, chr(i)): i for i in range(65, 90)}
+        for future in as_completed(futures):
+            i = futures[future]
+            try:
+                brands_az_dict[i] = future.result()
+            except Exception as e:
+                print(f"Failed to fetch brands for letter {chr(i)}: {e}")
+
+    # Now, gather all the brand links and find models for each brand
+    with ThreadPoolExecutor() as executor:
+        model_futures = []
+        for brand_alpha in brands_az_dict.values():  # brand a-z
+            for brand in brand_alpha.values():  # link to each brand
+                # Queue up a thread to find models for each brand
+                model_futures.append(executor.submit(scraper.find_model, brand))
+        
+        for future in as_completed(model_futures):
+            try:
+                models = future.result()
+                # Filter models based on the query and update result_model
+                result_model.update({k: v for k, v in models.items() if query in k.lower()})
+            except Exception as e:
+                print(f"Failed to fetch models: {e}")
+
+    # Finally, multithreading to find tables for each model
+    with ThreadPoolExecutor() as executor:
+        table_futures = {executor.submit(scraper.find_table, model_url): model_name for model_name, model_url in result_model.items()}
+        for future in as_completed(table_futures):
+            model_name = table_futures[future]
+            try:
+                result[model_name] = future.result()
+            except Exception as e:
+                print(f"Failed to fetch table for {model_name}: {e}")
+
+    return result
 
 if(__name__) == "__main__":
     app.run(debug=True)
