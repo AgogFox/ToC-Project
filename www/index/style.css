@@ -175,40 +175,7 @@ body {
   text-align: center;
   box-sizing: border-box;
 }
-.letter-display {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  padding: 20px;
-}
-.letter-display span{
-  align-items: center;
-  font-size:96px;
-  margin: 0;
-  color:white;
-  padding: 10px;
-  width: 100%;
-  text-align: center;
-  box-sizing: border-box;
-}
-.car-list{
-  display:flex;
-  justify-content:center;
-  margin:5rem;
-  gap: 50px;
-  padding-left: 0;
-  flex-wrap: wrap;
-  color:white;
-}
-.car-list a{
-  text-decoration: none;
-  color : white;
-  transition: color 0.3s ease;
-}
-.car-list a:hover{
-  color:rgba(92, 44, 0, 0.868);
-}
+
 @media (max-width: 776px) {
   .vehicle-card {
     flex: 0 0 400px;
