@@ -13,13 +13,17 @@ BASE_URL = "https://www.supercars.net/blog/all-brands/"
 #   [x] direct
 #   [] 301 manual
 #[x]filter infomation of each car
-#[]create API endpoint
+#create API endpoint
+#  [x]/api/alpha
+#  [x]/api/brand
+#  []/api/search
+#  []/api/download ?typee=, ?alpha=, ?brand=
 #[x]convert return data to json format agreed on API docs
-#[]scrape image
-#[]search
+#[x]scrape image
 #[]convert data to csv for download
-#[]filter everything before 'Pictures &amp; Galleries' for easier scraping
+#[]filter everything before 'Pictures &amp; Galleries' for easier/faster scraping
 #[]click load more button to get full information
+#[]multi thread request
 
 class Scraper:
     def __init__(self, url: str) -> None:
