@@ -6,26 +6,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 BASE_URL = "https://www.supercars.net/blog/all-brands/"
 
-#TODO
-#[x]filter brands base on alphabet
-#filter car of each brand
-#   [x]301 to all-brands
-#   [x]301 to /blog/category
-#   [x] direct
-#   [] 301 manual
-#[x]filter infomation of each car
-#create API endpoint
-#  [x]/api/alpha
-#  [x]/api/brand
-#  [x]/api/search
-#[x]convert return data to json format agreed on API docs
-#[x]scrape image
-#[]convert data to csv for download
-#[x]multi thread request
-#[]condition /api/bran/<brand with one model> (start with 4 digit) use function find table instead
-#[]filter everything before 'Pictures &amp; Galleries' for easier/faster scraping and enable to scrape model in blog
-#[]click load more button to get full information
-
 class Scraper:
     def __init__(self, url: str) -> None:
         self.BASE_URL = url
