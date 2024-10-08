@@ -40,6 +40,7 @@ class Scraper:
             rf'<li><p><a[^>]*\bhref=["\']([^"\']*)["\'][^>]*>({char.upper()}.*?)</a>'
         )
         brands = re.findall(brand_pattern, self.BASE_HTML)
+        brands = [(item[0], item[1].replace("&amp;", "&")) for item in brands]
         for brand_url, brand_name in brands:
             brand_dict[brand_name] = brand_url
         return brand_dict
@@ -164,7 +165,7 @@ def brand(name):
     # Use ThreadPoolExecutor for parallel fetching of model tables
     with ThreadPoolExecutor() as executor:
         futures = [executor.submit(fetch_model_table, model_name, model_url) 
-                   for model_name, model_url in models.items()]
+                    for model_name, model_url in models.items()]
 
         # Gather results from all threads
         for future in as_completed(futures):
