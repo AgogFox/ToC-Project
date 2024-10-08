@@ -124,6 +124,18 @@ class Scraper:
             key, value = item.split(' : ')
             table_dict[key] = value
         return table_dict
+    
+    def find_header(self, self_url: str) -> str: 
+        pattern = re.compile(
+            r'<h1 class="entry-title[^>]*>(.*?)<\/h1>'
+        )
+        self_html = self.__fetch_html(self_url)
+        match = re.search(pattern, self_html)
+        if match:
+            header = match.group(1).strip() 
+        else:
+            header = None
+        return header
 
 app = Flask(__name__)
 scraper = Scraper(BASE_URL)
@@ -161,14 +173,18 @@ def brand(name):
     # Function to fetch model table
     def fetch_model_table(model_name, model_url):
         return model_name, scraper.find_table(model_url)
+    
+    def fetch_self_table(self_url):
+        return scraper.find_header(self_url), scraper.find_table(self_url)
 
     # Use ThreadPoolExecutor for parallel fetching of model tables
     with ThreadPoolExecutor() as executor:
         futures = [executor.submit(fetch_model_table, model_name, model_url) 
                     for model_name, model_url in models.items()]
+        self_futures = executor.submit(fetch_self_table, brand_url)
 
         # Gather results from all threads
-        for future in as_completed(futures):
+        for future in as_completed(futures + [self_futures]):
             model_name, table_data = future.result()
             r[model_name] = table_data
             
