@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     carLink.textContent = car;
                     carLink.href = "#";
                     carLink.onclick = function() {
-                        changePage(car);
+                        let carEncode = car.replace(/ /g, "%20").replace(/&/g, "%26");
+                        changePage(carEncode);
                     };
                     itemCar.appendChild(carLink);
                     carList.appendChild(itemCar);
