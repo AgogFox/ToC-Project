@@ -37,7 +37,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
+function getInputValue() {
+    const srh = document.getElementById('inpsearch').value.toUpperCase();
+    console.log(srh);
+    window.location.href = `/search?q=${srh}`;
+}
 
 function createCSVDownloadButton(data) {
     const csvContent = "data:text/csv;charset=utf-8," + data.map(e => e).join("\n");

@@ -168,9 +168,9 @@ function createDynamicModal(content, DATA) {
 
 
 function getInputValue() {
-  const inputElement = document.getElementById('inpsearch').value.toUpperCase();
-  console.log(inputElement);
-  window.location.href = `/models?brand=${inputElement}`;
+  const srh = document.getElementById('inpsearch').value.toUpperCase();
+  console.log(srh);
+  window.location.href = `/search?q=${srh}`;
 }
 // Function to close the modal
 function closeModal(modal) {

@@ -184,3 +184,53 @@ function createDynamicModal(content, DATA) {
     overlay.classList.add('active'); // Show overlay
     }
 }
+
+
+function getInputValue() {
+    const srh = document.getElementById('inpsearch').value.toUpperCase();
+    console.log(srh);
+    window.location.href = `/search?q=${srh}`;
+}
+  // Function to close the modal
+  function closeModal(modal) {
+      if (modal == null) return;
+      modal.classList.remove('active');
+      const overlay = document.getElementById('overlay');
+      overlay.classList.remove('active');
+      modal.remove(); // Remove modal from DOM
+  }
+  
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    // Convert JSON to CSV in the desired format
+    const csv = jsonToCsv(dataJs);
+  
+    // Create a Blob from the CSV data
+    const blob = new Blob([csv], { type: 'text/csv' });
+  
+    // Create a download link
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'data.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+  
+  function jsonToCsv(json) {
+    const csvRows = [];
+  
+    // Iterate over each car model in the JSON object
+    for (const [carModel, details] of Object.entries(json)) {
+        // Format each detail as 'key:value' and join them with ' | '
+        const detailString = Object.entries(details)
+            .map(([key, value]) => `${key}:${value}`)
+            .join(' | ');
+  
+        // Combine the car model and the detail string, separated by a comma
+        csvRows.push(`${carModel}, ${detailString}`);
+    }
+  
+    return csvRows.join('\n');
+  }
