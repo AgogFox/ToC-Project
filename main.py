@@ -40,7 +40,7 @@ class Scraper:
             rf'<li><p><a[^>]*\bhref=["\']([^"\']*)["\'][^>]*>({char.upper()}.*?)</a>'
         )
         brands = re.findall(brand_pattern, self.BASE_HTML)
-        brands = [(item[0], item[1].replace("&amp;", "&")) for item in brands]
+        brands = [(item[0], item[1].replace("&amp;", "&").replace("...", ".").replace("..", ".").replace("..", ".")) for item in brands]
         for brand_url, brand_name in brands:
             brand_dict[brand_name] = brand_url
         return brand_dict
