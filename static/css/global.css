@@ -124,6 +124,10 @@ body {
   color: var(--yellowActive);
 }
 
+.search-container .fa-search:hover{
+  cursor: pointer;
+}
+
 .rounded-button {
   position: fixed;
   bottom: 5%;
