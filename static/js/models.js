@@ -141,6 +141,12 @@ function createDynamicModal(content, DATA) {
     }
 }
 
+
+function getInputValue() {
+  const inputElement = document.getElementById('inpsearch').value.toUpperCase();
+  console.log(inputElement);
+  window.location.href = `/models?brand=${inputElement}`;
+}
 // Function to close the modal
 function closeModal(modal) {
     if (modal == null) return;
