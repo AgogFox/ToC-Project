@@ -8,9 +8,9 @@ function changePage(letter) {
 
 
 function getInputValue() {
-    const inputElement = document.getElementById('inpsearch').value.toUpperCase();
-    console.log(inputElement);
-    window.location.href = `/models?brand=${inputElement}`;
+    const srh = document.getElementById('inpsearch').value.toUpperCase();
+    console.log(srh);
+    window.location.href = `/search?q=${srh}`;
 }
 
 

@@ -140,6 +140,10 @@ def send_brands_file():
 def send_models_file():
     return send_from_directory('www/models', 'models.html')
 
+@app.route('/search')
+def send_search_file():
+    return send_from_directory('www/search', 'search.html')
+
 @app.route('/api/alpha/<char>', methods=["GET"])
 def alphabet(char):
     names = list(scraper.find_brands_list(char).keys()) #First layer

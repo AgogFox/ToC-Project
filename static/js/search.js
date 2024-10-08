@@ -1,5 +1,23 @@
+// const container = document.getElementById('cards');
+
+// searchModel();
+// let carFromsearch;
+// function searchModel(){
+//     fetch(`/api/search?q=${encodeURIComponent(query)}`)
+//         .then(response => response.json)
+//         .then(data =>{
+//             carFromsearch = [];
+//             Object.keys(data).forEach((k) =>{
+//                 carFromsearch.push(k);
+//             })
+//             localStorage.setItem('carFromSearch', JSON.stringify(carFromSearch));
+//         })
+//         .catch(error => console.error('Error fetching search data:', error));
+// }
+
+
 const container = document.getElementById('cards');
-let brand;
+let srh;
 let dataJs;
 const storedCars = localStorage.getItem('carFromSearch');
 let carFromSearch = storedCars ? JSON.parse(storedCars) : [];
@@ -7,16 +25,17 @@ let carFromSearch = storedCars ? JSON.parse(storedCars) : [];
 document.addEventListener("DOMContentLoaded", async function () {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    brand = urlParams.get('brand');
+    srh = urlParams.get('q');
     await run();
 });
 
 async function run() {
-    if (brand) {
-        document.getElementById('brand-title').textContent = brand;
-
+    if (srh) {
+        document.getElementById('srh-title').textContent = srh;
         try {
-            const response = await fetch(`/api/brand/${brand}`);
+            const response = await fetch(`/api/search?q=${srh}`);
+            console.log("juu4")
+            console.log(response)
             const data = await response.json();
             populateVehicleCards(data);
             dataJs = data;
@@ -164,68 +183,4 @@ function createDynamicModal(content, DATA) {
 
     overlay.classList.add('active'); // Show overlay
     }
-}
-
-
-function getInputValue() {
-  const inputElement = document.getElementById('inpsearch').value.toUpperCase();
-  console.log(inputElement);
-  window.location.href = `/models?brand=${inputElement}`;
-}
-// Function to close the modal
-function closeModal(modal) {
-    if (modal == null) return;
-    modal.classList.remove('active');
-    const overlay = document.getElementById('overlay');
-    overlay.classList.remove('active');
-    modal.remove(); // Remove modal from DOM
-}
-
-document.getElementById('downloadBtn').addEventListener('click', () => {
-  // Sample JSON data, replace this with your data from the backend
-//   const jsonData = {
-//       car_model1: {
-//           detailKey1: "detailValue1",
-//           detailKey2: "detailValue2",
-//           detailKey3: "detailValue3"
-//       },
-//       car_model2: {
-//           detailKey1: "detailValue1",
-//           detailKey2: "detailValue2",
-//           detailKey3: "detailValue3"
-//       }
-//   };
-
-  // Convert JSON to CSV in the desired format
-  const csv = jsonToCsv(dataJs);
-
-  // Create a Blob from the CSV data
-  const blob = new Blob([csv], { type: 'text/csv' });
-
-  // Create a download link
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'data.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-function jsonToCsv(json) {
-  const csvRows = [];
-
-  // Iterate over each car model in the JSON object
-  for (const [carModel, details] of Object.entries(json)) {
-      // Format each detail as 'key:value' and join them with ' | '
-      const detailString = Object.entries(details)
-          .map(([key, value]) => `${key}:${value}`)
-          .join(' | ');
-
-      // Combine the car model and the detail string, separated by a comma
-      csvRows.push(`${carModel}, ${detailString}`);
-  }
-
-  return csvRows.join('\n');
 }
